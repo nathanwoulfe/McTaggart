@@ -1,0 +1,35 @@
+﻿{
+    propertyEditors: [
+        {
+			alias: "NW.TagYoureIt",
+			name: "Tag You're It - Auto Tagging",
+			editor: {
+				view: "~/App_Plugins/tagyoureit/view.html"				
+			},
+			prevalues: {
+				fields: [
+					{
+						label: "API key",
+						description: "OpenCalais API key - available from opencalais.com",
+						key: "apiKey",
+						view: "textstring"
+					},
+					{
+						label: "Properties",
+						description: "Comma-delimited list of property aliases - content from these will be tagged",
+						key: "properties",
+						view: "textstring"
+					}
+				]
+			}
+        }
+    ]
+    ,
+    javascript: [
+        '~/App_Plugins/tagyoureit/tagyoureit.controller.js',
+    ]
+	,
+	css: [
+		'~/App_Plugins/tagyoureit/style.css'
+	]
+}
