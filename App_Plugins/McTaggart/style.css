@@ -1,12 +1,12 @@
-﻿.tagyoureit .btn {
+﻿.mctaggart .btn {
   float: left;
   margin-right: 12px;
   margin-top: 12px; }
-.tagyoureit .umb-tags {
+.mctaggart .umb-tags {
   float: left;
   padding: 5px;
   max-width: calc(100% - 102px); }
-.tagyoureit .label-empty {
+.mctaggart .label-empty {
   background: #888;
   cursor: default; }
 

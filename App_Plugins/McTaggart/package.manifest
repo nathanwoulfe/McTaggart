@@ -1,10 +1,10 @@
 ﻿{
     propertyEditors: [
         {
-			alias: "NW.TagYoureIt",
-			name: "Tag You're It - Auto Tagging",
+			alias: "NW.McTaggart",
+			name: "McTaggart - Auto Tagging",
 			editor: {
-				view: "~/App_Plugins/tagyoureit/view.html"				
+				view: "~/App_Plugins/mctaggart/view.html"				
 			},
 			prevalues: {
 				fields: [
@@ -26,10 +26,10 @@
     ]
     ,
     javascript: [
-        '~/App_Plugins/tagyoureit/tagyoureit.controller.js',
+        '~/App_Plugins/mctaggart/mctaggart.controller.js',
     ]
 	,
 	css: [
-		'~/App_Plugins/tagyoureit/style.css'
+		'~/App_Plugins/mctaggart/style.css'
 	]
 }

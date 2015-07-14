@@ -1,25 +1,22 @@
-﻿angular.module('umbraco').controller('tagyoureit.controller', ['$scope', 'editorState', 'contentResource', 'contentEditingHelper', 'tagFactory', function ($scope, editorState, contentResource, contentEditingHelper, tagFactory) {
-
-    $scope.msg = 'tag';
-
-    var apiKey = $scope.model.config.apiKey,
-        alias = $scope.model.config.properties.split(',');
-        currentId = editorState.getCurrent().id;
+﻿angular.module('umbraco').controller('mctaggart.controller', ['$scope', 'editorState', 'contentResource', 'contentEditingHelper', 'tagFactory', function ($scope, editorState, contentResource, contentEditingHelper, tagFactory) {
 
     $scope.tag = function () {
 
-        contentResource.getById(currentId).then(function (resp) {
+        $scope.model.value = [];
+        $scope.loading = true;
+
+        contentResource.getById(editorState.getCurrent().id).then(function (resp) {
 
             var props = contentEditingHelper.getAllProps(resp),
                 data;
 
-            angular.forEach(alias, function (a) {
+            angular.forEach($scope.model.config.properties.split(','), function (a) {
                 data += $.grep(props, function (p) {
                     return p.alias === a;
                 })[0].value;
             })
 
-            tagFactory.getTags(data, apiKey).then(function (resp) {
+            tagFactory.getTags(data, $scope.model.config.apiKey).then(function (resp) {
                 parseTags(resp);
             });
         });
@@ -35,12 +32,23 @@
         });
 
         $scope.model.value = $scope.tags !== $scope.model.value ? $scope.tags : $scope.model.value;
+        $scope.loading = false;
+
         $scope.$apply();
+
     }
 
     $scope.removeTag = function (t) {
         var i = $scope.model.value.indexOf(t);
         $scope.model.value.splice(i, 1);
+    }
+
+    $scope.placeholder = function () {
+        return $scope.loading ? 'Thinking...' : 'There\'s nothing here, yet';
+    }
+
+    $scope.showPlaceholder = function () {
+        return $scope.model.value.length === 0;
     }
 
 }]);

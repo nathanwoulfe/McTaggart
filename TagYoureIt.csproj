@@ -43,18 +43,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\TagYoureIt\style.css">
+    <Content Include="App_Plugins\McTaggart\style.css">
       <DependentUpon>style.scss</DependentUpon>
     </Content>
-    <Content Include="App_Plugins\TagYoureIt\tagyoureit.controller.js" />
-    <Content Include="App_Plugins\TagYoureIt\view.html" />
+    <Content Include="App_Plugins\McTaggart\mctaggart.controller.js" />
+    <Content Include="App_Plugins\McTaggart\view.html" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Plugins\TagYoureIt\package.manifest" />
-    <None Include="App_Plugins\TagYoureIt\style.css.map">
+    <None Include="App_Plugins\McTaggart\package.manifest" />
+    <None Include="App_Plugins\McTaggart\style.css.map">
       <DependentUpon>style.css</DependentUpon>
     </None>
-    <None Include="App_Plugins\TagYoureIt\style.scss" />
+    <None Include="App_Plugins\McTaggart\style.scss" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
