@@ -23,17 +23,16 @@
     }
 
     var parseTags = function (d) {
-        $scope.tags = [];
+
+        $scope.model.value = [];
 
         angular.forEach(d, function (o) {
             if (o._typeGroup === 'socialTag') {
-                $scope.tags.push(o.name);
+                $scope.model.value.push(o.name);
             }
         });
 
-        $scope.model.value = $scope.tags !== $scope.model.value ? $scope.tags : $scope.model.value;
         $scope.loading = false;
-
         $scope.$apply();
 
     }
