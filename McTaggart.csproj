@@ -7,8 +7,8 @@
     <ProjectGuid>{A4E196D0-AA73-495B-8FF2-DDEB9EBDAE93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TagYoureIt</RootNamespace>
-    <AssemblyName>TagYoureIt</AssemblyName>
+    <RootNamespace>McTaggart</RootNamespace>
+    <AssemblyName>McTaggart</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

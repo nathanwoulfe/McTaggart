@@ -5,3 +5,4 @@ properties/
 *.config
 *.sln
 *.suo
+*.user
