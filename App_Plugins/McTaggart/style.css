@@ -9,5 +9,7 @@
 .mctaggart .label-empty {
   background: #888;
   cursor: default; }
+.mctaggart .twitter-typeahead {
+  margin-top: 10px; }
 
 /*# sourceMappingURL=style.css.map */

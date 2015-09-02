@@ -19,14 +19,32 @@
 						description: "Comma-delimited list of property aliases - content from these will be tagged",
 						key: "properties",
 						view: "textstring"
+					},
+					{
+						label: "Tag group",
+						description: "Define a tag group",
+						key: "group",
+						view: "textstring"
+					},
+					{
+						label: "Storage type",
+						description: "Select whether to store the tags in cache as CSV (default) or as JSON. The only benefits of storage as JSON is that you are able to have commas in a tag value but this will require parsing the json in your views or using a property value converter",
+						key: "storageType",
+						view: "~/App_Plugins/McTaggart/tags.prevalues.html"
 					}
 				]
+			},
+			defaultConfig: {
+				apiKey: '',
+				properties: 'bodyText',
+				group: 'default',
+				storageType: 'csv'
 			}
         }
     ]
     ,
     javascript: [
-        '~/App_Plugins/mctaggart/mctaggart.controller.js',
+        '~/App_Plugins/mctaggart/mctaggart.controller.js'
     ]
 	,
 	css: [

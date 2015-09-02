@@ -68,10 +68,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\McTaggart\lib\typeahead.bundle.min.js" />
     <Content Include="App_Plugins\McTaggart\style.css">
       <DependentUpon>style.scss</DependentUpon>
     </Content>
     <Content Include="App_Plugins\McTaggart\mctaggart.controller.js" />
+    <Content Include="App_Plugins\McTaggart\tags.prevalues.html" />
     <Content Include="App_Plugins\McTaggart\view.html" />
   </ItemGroup>
   <ItemGroup>
