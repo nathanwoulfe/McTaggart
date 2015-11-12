@@ -20,33 +20,25 @@ namespace McTaggart.Controllers
     public class TagsApiController : UmbracoAuthorizedApiController
     {
 
-        static string _address = "https://api.thomsonreuters.com/permid/calais";
-        static IContentService _cs = ApplicationContext.Current.Services.ContentService;
+        private readonly string _address = "https://api.thomsonreuters.com/permid/calais";
+        private static IContentService _cs = ApplicationContext.Current.Services.ContentService;
 
-        [HttpGet]
-        public HttpResponseMessage GetTags(string apiKey, int id, string props)
-        {
-            IContent node = _cs.GetById(Convert.ToInt32(id));
-            var data = "";
-            var propsArr = props.Split(',');
-
-            foreach (var p in propsArr)
-            {
-                data += node.GetValue(p).ToString();
-            }
-            
+        [HttpPost]
+        public HttpResponseMessage GetTags([FromBody] ContentObject Content)
+        {           
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(_address);
 
-            req.ContentType = "text/raw";
-            req.Headers.Add("X-AG-Access-Token", apiKey);
+            req.ContentType = "text/html";
+            req.Headers.Add("X-AG-Access-Token", Content.ApiKey);
             req.Headers.Add("outputFormat", "application/json");
+            req.Headers.Add("omitOutputtingOriginalText", "true");
             req.Method = "POST";
 
             List<string> tags = new List<string>();
 
             try
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(data);
+                byte[] bytes = Encoding.UTF8.GetBytes(Content.StringToTag);
 
                 req.ContentLength = bytes.Length;
                 Stream os = req.GetRequestStream();
@@ -61,13 +53,13 @@ namespace McTaggart.Controllers
                     s = resp.GetResponseStream();
                     StreamReader sr = new StreamReader(s);
 
-                    dynamic jObject = JsonConvert.DeserializeObject<dynamic>(sr.ReadToEnd().Trim());
+                    var jObject = JsonConvert.DeserializeObject<dynamic>(sr.ReadToEnd().Trim());
 
                     foreach (var o in jObject)
                     {
-                        dynamic val = o.Value;
+                        var val = o.Value;
 
-                        if (val["_typeGroup"] != null && val._typeGroup == "socialTag")
+                        if (val["_typeGroup"] != null && (val._typeGroup == "socialTag" || val._typeGroup == "entities"))
                         {
                             tags.Add(val.name.Value);
                         }
@@ -80,7 +72,14 @@ namespace McTaggart.Controllers
             }
 
             return Response(tags);
+        }
 
+        [HttpPost]
+        public HttpResponseMessage PostTags([FromBody] TagsObject Tags)
+        {
+            IContent node = _cs.GetById(Convert.ToInt32(Tags.Id));
+            node.SetTags(TagCacheStorageType.Csv, Tags.Alias, Tags.Tags, true);
+            return Response(Tags.Tags.Length);
         }
 
         public HttpResponseMessage Response(object o)
@@ -90,5 +89,18 @@ namespace McTaggart.Controllers
             return response;
         }
 
+    }
+
+    public class ContentObject
+    {
+        public string ApiKey { get; set; }
+        public string StringToTag { get; set; }
+    }
+
+    public class TagsObject
+    {
+        public string[] Tags { get; set; }
+        public int Id { get; set; }
+        public string Alias { get; set; }
     }
 }

@@ -10,6 +10,10 @@
         float:left;
         padding:5px;
         max-width:calc(100% - 102px);
+
+        input {
+            vertical-align:middle;
+        }
     }
 
     .label-empty {

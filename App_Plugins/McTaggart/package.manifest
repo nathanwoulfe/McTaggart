@@ -4,7 +4,8 @@
 			alias: "NW.McTaggart",
 			name: "McTaggart - Auto Tagging",
 			editor: {
-				view: "~/App_Plugins/mctaggart/view.html"				
+				view: "~/App_Plugins/mctaggart/view.html",
+				valueType: "STRING"
 			},
 			prevalues: {
 				fields: [
@@ -25,12 +26,6 @@
 						description: "Define a tag group",
 						key: "group",
 						view: "textstring"
-					},
-					{
-						label: "Storage type",
-						description: "Select whether to store the tags in cache as CSV (default) or as JSON. The only benefits of storage as JSON is that you are able to have commas in a tag value but this will require parsing the json in your views or using a property value converter",
-						key: "storageType",
-						view: "~/App_Plugins/McTaggart/tags.prevalues.html"
 					}
 				]
 			},

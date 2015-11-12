@@ -5,7 +5,13 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
     function ($rootScope, $scope, assetsService, editorState, tagFactory, $element, angularHelper, umbRequestHelper, $timeout) {
 
     var $typeahed;
-    $scope.tagToAdd = ''; 
+    $scope.tagToAdd = '';
+
+    if ($scope.model.value.length) {
+        $scope.model.value = $scope.model.value.split(',');
+    } else {
+        $scope.model.value = [];
+    }
 
     // Method required by the valPropertyValidator directive (returns true if the property editor has at least one tag selected)
     $scope.validateMandatory = function () {
@@ -26,33 +32,30 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
         return $scope.model.value.length === 0;
     }
 
-    function checkStorageType() {
-        console.log($scope.model.value, $scope.model.config.storageType);
-        if (!$scope.model.config.storageType || $scope.model.config.storageType !== "json") {
-            //it is csv
-            if (!$scope.model.value) {
-                $scope.model.value = [];
-            }
-        }
-    }
-
     // Fetch the typeahead script and start the fun...
     assetsService.loadJs("~/App_Plugins/McTaggart/lib/typeahead.bundle.min.js").then(function () {
-
-        // load current value
-        if ($scope.model.value) {
-            checkStorageType();
-        }
-        else {
-            $scope.model.value = [];
-        }
 
         // Click... polls the OpenCalais API for tag data
         $scope.tag = function () {
 
             $scope.loading = true;
-            tagFactory.getTags($scope.model.config.apiKey, editorState.getCurrent().id, $scope.model.config.properties).then(function (resp) {
+            var stringToTag = '';
 
+            $scope.model.value = [];
+            $scope.propertyForm.tagCount.$setViewValue(0);
+
+            // extract the required properties to submit for tagging
+            angular.forEach(editorState.getCurrent().tabs, function (tab) {
+                angular.forEach(tab.properties, function (prop) {
+                    if ($scope.model.config.properties.split(',').indexOf(prop.alias) !== -1) {
+                        stringToTag += prop.value;
+                    }
+                });
+            });
+
+            // send the string and api key 
+            tagFactory.getTags($scope.model.config.apiKey, stringToTag).then(function (resp) {                
+                
                 // Push the tags into the model value
                 angular.forEach(resp.data, function (o) {
                     addTag(o);
@@ -66,7 +69,13 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
         $scope.removeTag = function (t) {
             $scope.model.value.splice($scope.model.value.indexOf(t), 1);
             $scope.propertyForm.tagCount.$setViewValue($scope.model.value.length);
+
+            $scope.showPlaceholder();
         }
+
+
+        // This is the Umbraco core tag property editor
+        // includes helper functions and Bloodhound config/init
 
         // Helper method to add a tag on enter or on typeahead select
         function addTag(tagToAdd) {
@@ -90,20 +99,15 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
         };
 
         $scope.addTag = function () {
-            //ensure that we're not pressing the enter key whilst selecting a typeahead value from the drop down
-            //we need to use jquery because typeahead duplicates the text box
             addTag($scope.tagToAdd);
             $scope.tagToAdd = "";
-            //this clears the value stored in typeahead so it doesn't try to add the text again
-            // http://issues.umbraco.org/issue/U4-4947
             $typeahead.typeahead('val', '');
         };
 
         //vice versa
         $scope.model.onValueChanged = function (newVal, oldVal) {
-            //update the display val again if it has changed from the server
             $scope.model.value = newVal;
-            checkStorageType();
+            $scope.model.value = $scope.model.value.split(',');
         };
 
         //configure the tags data source
@@ -149,10 +153,8 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
         });
 
         tagsHound.initialize(true);
-
         //configure the type ahead
         $timeout(function () {
-
             $typeahead = $element.find('.tags-' + $scope.model.alias).typeahead(
             {
                 //This causes some strangeness as it duplicates the textbox, best leave off for now.
@@ -167,7 +169,6 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
                 displayKey: "value",
                 source: function (query, cb) {
                     tagsHound.get(query, function (suggestions) {
-                        console.log(query, suggestions);
                         cb(removeCurrentTagsFromSuggestions(suggestions));
                     });
                 },
@@ -181,7 +182,6 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
 
             }).bind("typeahead:autocompleted", function (obj, datum, name) {
                 angularHelper.safeApply($scope, function () {
-                    addTag(datum["value"]);
                     $scope.tagToAdd = "";
                 });
 
@@ -201,8 +201,9 @@ angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$sc
 
 angular.module('umbraco.resources').factory('tagFactory', function ($http) {
     return {
-        getTags: function (apiKey, id, props) {
-            return $http.get('backoffice/mctaggart/tagsapi/gettags', { params: { apiKey: apiKey, id: id, props: props } });
+        getTags: function (apiKey, stringToTag) {
+            var data = { apiKey: apiKey, stringToTag: stringToTag };
+            return $http.post('backoffice/mctaggart/tagsapi/gettags', JSON.stringify(data));
         }
     }
 });

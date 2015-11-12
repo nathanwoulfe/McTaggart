@@ -6,6 +6,8 @@
   float: left;
   padding: 5px;
   max-width: calc(100% - 102px); }
+  .mctaggart .umb-tags input {
+    vertical-align: middle; }
 .mctaggart .label-empty {
   background: #888;
   cursor: default; }
