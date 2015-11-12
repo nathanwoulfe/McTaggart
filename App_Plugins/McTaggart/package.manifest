@@ -33,7 +33,7 @@
 				apiKey: '',
 				properties: 'bodyText',
 				group: 'default',
-				storageType: 'csv'
+				storageType: 'Csv'
 			}
         }
     ]
