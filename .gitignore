@@ -6,3 +6,5 @@ properties/
 *.sln
 *.suo
 *.user
+*.css
+*.css.map
