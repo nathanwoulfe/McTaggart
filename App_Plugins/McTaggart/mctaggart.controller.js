@@ -1,5 +1,5 @@
 ﻿/* Extends the core Umbraco tags property editor to include auto-generated tags from the OpenCalais API */
-/* API key -> jz5VUywxNNq4Lur3S7ie9gslFsvoIcHl */
+
 
 angular.module('umbraco').controller('mctaggart.controller', ['$rootScope', '$scope', 'assetsService', 'editorState', 'tagFactory', '$element', 'angularHelper', 'umbRequestHelper', '$timeout',
     function ($rootScope, $scope, assetsService, editorState, tagFactory, $element, angularHelper, umbRequestHelper, $timeout) {
