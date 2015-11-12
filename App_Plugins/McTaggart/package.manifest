@@ -16,6 +16,12 @@
 						view: "textstring"
 					},
 					{
+						label: "Tag count",
+						description: "Maximum number of tags to return",
+						key: "tagCount",
+						view: "textstring"
+					},
+					{
 						label: "Properties",
 						description: "Comma-delimited list of property aliases - content from these will be tagged",
 						key: "properties",
@@ -31,8 +37,9 @@
 			},
 			defaultConfig: {
 				apiKey: '',
+				tagCount: 10,
 				properties: 'bodyText',
-				group: 'default',
+				group: 'autotags',
 				storageType: 'Csv'
 			}
         }

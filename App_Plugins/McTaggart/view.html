@@ -9,14 +9,5 @@
             <span ng-bind-html="tag"></span>
             <i class="icon icon-delete"></i>
         </span>
-
-        <input type="text"
-               ng-if="!showPlaceholder()"
-               class="typeahead mctaggart-{{model.alias}}"
-               ng-model="$parent.tagToAdd"
-               ng-keydown="$parent.addTagOnEnter($event)"
-               on-blur="$parent.addTag()"
-               localize="placeholder"
-               placeholder="@placeholders_enterTags" />
     </div>
 </div>

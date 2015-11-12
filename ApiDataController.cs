@@ -71,7 +71,7 @@ namespace McTaggart.Controllers
                 return Response(e);
             }
 
-            return Response(tags);
+            return Response(tags.Take(Content.TagCount));
         }
 
         [HttpPost]
@@ -95,6 +95,7 @@ namespace McTaggart.Controllers
     {
         public string ApiKey { get; set; }
         public string StringToTag { get; set; }
+        public int TagCount { get; set; }
     }
 
     public class TagsObject
